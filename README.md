@@ -1,13 +1,45 @@
-# Boosting Stacking and Bagging for Ensemble Models for Time Series Analysis with Python
+# Ensemble Models for Ordered Time Series
 
-**Published:** 2025-01-20
-**Medium:** [https://medium.com/@kyle-t-jones/boosting-stacking-and-bagging-for-ensemble-models-for-time-series-analysis-with-python-d74ab9026782](https://medium.com/@kyle-t-jones/boosting-stacking-and-bagging-for-ensemble-models-for-time-series-analysis-with-python-d74ab9026782)
+This project demonstrates ensemble modeling approaches for ordered time series data.
 
-## About
+## Project Structure
 
-Place the code for this article in this repository.
-The original article export is saved as `article.md`.
+```
+.
+├── README.md           # This file
+├── main.py            # Main entry point
+├── config.yaml        # Configuration file
+├── requirements.txt   # Python dependencies
+├── src/               # Core functions
+│   ├── core.py        # Ensemble model functions
+│   └── plotting.py    # Tufte-style plotting utilities
+├── tests/             # Unit tests
+├── data/              # Data files
+└── images/            # Generated plots and figures
+```
 
-## Files
+## Configuration
 
-Add your `.ipynb`, `.py`, `.yaml`, `.js`, `.ts`, or other project files here.
+Edit `config.yaml` to customize:
+- Data source or synthetic generation
+- Model parameters (lag, train_size)
+- Ensemble method (mean, median)
+- Output settings
+
+## Ensemble Methods
+
+### Mean Ensemble
+- Average predictions from multiple models
+- Reduces variance
+- Simple and effective
+
+### Median Ensemble
+- Median of predictions
+- Robust to outliers
+- Less sensitive to extreme predictions
+
+## Caveats
+
+- By default, generates synthetic time series data.
+- Ensemble performance depends on model diversity.
+- Ordered time series requires preserving sequence.
