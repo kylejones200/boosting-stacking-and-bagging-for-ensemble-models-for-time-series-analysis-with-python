@@ -8,6 +8,12 @@ from sklearn.metrics import mean_absolute_error
 import statsmodels.api as sm
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 np.random.seed(42)
 plt.rcParams.update({'font.family': 'serif','axes.spines.top': False,'axes.spines.right': False,'axes.linewidth': 0.8})
 
@@ -67,9 +73,9 @@ def main():
     cfg = Config()
     y = load_series(cfg)
     ets_m, sar_m, ens_m, last = rolling_origin_ensemble(y, cfg)
-    print(f"ETS mean MAE: {ets_m}")
-    print(f"SARIMAX mean MAE: {sar_m}")
-    print(f"Ensemble mean MAE: {ens_m}")
+    logger.info(f"ETS mean MAE: {ets_m}")
+    logger.info(f"SARIMAX mean MAE: {sar_m}")
+    logger.info(f"Ensemble mean MAE: {ens_m}")
 
     plt.figure(figsize=(9,4))
     plt.plot(y.index, y.values, label='history', alpha=0.6)

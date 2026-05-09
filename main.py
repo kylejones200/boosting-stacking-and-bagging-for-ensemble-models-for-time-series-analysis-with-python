@@ -55,9 +55,9 @@ def main():
     X_train, X_test = X[:train_size], X[train_size:]
     y_train, y_test = y[:train_size], y[train_size:]
     
-        models = train_ensemble_models(X_train, y_train)
+    models = train_ensemble_models(X_train, y_train)
     
-        individual_preds = {}
+    individual_preds = {}
     for name, model in models.items():
         pred = model.predict(X_test)
         individual_preds[name] = pred
@@ -67,12 +67,12 @@ def main():
     from sklearn.metrics import mean_squared_error
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    logging.info(f"\nEnsemble RMSE: {np.sqrt(mean_squared_error(y_test, ensemble_pred)):.4f}")
+logging.info(f"\nEnsemble RMSE: {np.sqrt(mean_squared_error(y_test, ensemble_pred)):.4f}")
     
-    plot_ensemble_forecast(y_test, individual_preds, ensemble_pred,
+plot_ensemble_forecast(y_test, individual_preds, ensemble_pred,
                           "Ensemble Model Forecast", output_dir / 'ensemble_forecast.png')
     
-    logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
+logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
 
 if __name__ == "__main__":
     main()
