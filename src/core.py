@@ -51,19 +51,20 @@ def ensemble_predict(models: Dict, X: np.ndarray, method: str = 'mean') -> np.nd
 def plot_ensemble_forecast(actual: np.ndarray, individual: Dict[str, np.ndarray],
                           ensemble: np.ndarray, title: str, output_path: Path):
     """Plot ensemble forecast """
-    fig, ax = plt.subplots(figsize=(10, 6))
+                          if plot:
+        fig, ax = plt.subplots(figsize=(10, 6))
     
-    ax.plot(actual, label="Actual", color="#4A90A4", linewidth=1.2)
+        ax.plot(actual, label="Actual", color="#4A90A4", linewidth=1.2)
     
-    colors = ["#D4A574", "#8B6F9E"]
-    for i, (name, pred) in enumerate(individual.items()):
-        ax.plot(pred, label=name, color=colors[i % len(colors)], linewidth=1.2, alpha=0.7)
+        colors = ["#D4A574", "#8B6F9E"]
+        for i, (name, pred) in enumerate(individual.items()):
+            ax.plot(pred, label=name, color=colors[i % len(colors)], linewidth=1.2, alpha=0.7)
     
-    ax.plot(ensemble, label="Ensemble", color="#A8C5A0", linewidth=1.5, linestyle='--')
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Value")
-    ax.legend(loc='best')
+        ax.plot(ensemble, label="Ensemble", color="#A8C5A0", linewidth=1.5, linestyle='--')
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Value")
+        ax.legend(loc='best')
     
-    plt.savefig(output_path, dpi=100, bbox_inches="tight")
-    plt.close()
+        plt.savefig(output_path, dpi=100, bbox_inches="tight")
+        plt.close()
 

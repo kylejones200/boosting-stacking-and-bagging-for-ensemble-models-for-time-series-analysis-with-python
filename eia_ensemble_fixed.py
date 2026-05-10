@@ -69,7 +69,7 @@ def rolling_origin_ensemble(y: pd.Series, cfg: Config):
     return float(np.mean(ets_maes)), float(np.mean(sar_maes)), float(np.mean(ens_maes)), last
 
 
-def main():
+def main(plot: bool = False):
     cfg = Config()
     y = load_series(cfg)
     ets_m, sar_m, ens_m, last = rolling_origin_ensemble(y, cfg)
@@ -77,13 +77,14 @@ def main():
     logger.info(f"SARIMAX mean MAE: {sar_m}")
     logger.info(f"Ensemble mean MAE: {ens_m}")
 
-    plt.figure(figsize=(9,4))
-    plt.plot(y.index, y.values, label='history', alpha=0.6)
-    if last:
-        for name in ['ETS','SARIMAX','Ensemble']:
-            plt.plot(last[name].index, last[name].values, label=f"{name} last fold")
-    plt.legend()
-    save_fig('eia_ensemble_last_fold.png')
+    if plot:
+        plt.figure(figsize=(9,4))
+        plt.plot(y.index, y.values, label='history', alpha=0.6)
+        if last:
+            for name in ['ETS','SARIMAX','Ensemble']:
+                plt.plot(last[name].index, last[name].values, label=f"{name} last fold")
+        plt.legend()
+        save_fig('eia_ensemble_last_fold.png')
 
 if __name__ == '__main__':
     main()
