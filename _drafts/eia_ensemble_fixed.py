@@ -1,3 +1,4 @@
+import signalplot
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,10 +16,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 np.random.seed(42)
-plt.rcParams.update({'font.family': 'serif','axes.spines.top': False,'axes.spines.right': False,'axes.linewidth': 0.8})
+signalplot.apply(font_family='serif')
 
-def save_fig(path: str):
-    plt.tight_layout(); plt.savefig(path, bbox_inches='tight'); plt.close()
 
 @dataclass
 class Config:
@@ -84,7 +83,7 @@ def main(plot: bool = False):
             for name in ['ETS','SARIMAX','Ensemble']:
                 plt.plot(last[name].index, last[name].values, label=f"{name} last fold")
         plt.legend()
-        save_fig('eia_ensemble_last_fold.png')
+        signalplot.save('eia_ensemble_last_fold.png')
 
 if __name__ == '__main__':
     main()
