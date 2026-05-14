@@ -53,7 +53,6 @@ images_dir = Path("images")
 images_dir.mkdir(exist_ok=True)
 
 # Update all savefig calls to use images_dir
-import matplotlib.pyplot as plt
 original_savefig = plt.savefig
 
 def savefig_tufte(filename, **kwargs):
@@ -68,8 +67,6 @@ plt.savefig = savefig_tufte
 # Code blocks from article
 
 # Code block 1
-import pandas as pd
-from pathlib import Path
 
 data_path = Path("../../geospatial/datasets/energy_indicators.csv")
 
