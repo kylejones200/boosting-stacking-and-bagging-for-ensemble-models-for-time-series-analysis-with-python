@@ -12,8 +12,8 @@ from sklearn.svm import SVR
 from xgboost import XGBRegressor
 import matplotlib.pyplot as plt
 import numpy as np
-
 np.random.seed(42)
+
 data = np.cumsum(np.random.randn(365))  # Cumulative sum to mimic trend
 
 # Create lag features

@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Set random seeds
-np.random.seed(42)
 try:
     import tensorflow as tf
     tf.random.set_seed(42)
@@ -78,6 +77,7 @@ voting_model = VotingRegressor([
 
 # Code block 5
 from sklearn.ensemble import StackingRegressor
+np.random.seed(42)
 
 # Meta-learner on base model predictions
 stacking_model = StackingRegressor(
