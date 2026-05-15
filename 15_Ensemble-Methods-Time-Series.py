@@ -1,7 +1,6 @@
 # Extracted code from '15_Ensemble-Methods-Time-Series.md'
 # Blocks appear in the same order as in the markdown article.
 
-import pandas as pd
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[1]

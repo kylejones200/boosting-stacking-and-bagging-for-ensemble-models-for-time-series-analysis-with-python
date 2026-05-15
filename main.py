@@ -22,7 +22,7 @@ def load_config(config_path: Path = None) -> dict:
     if config_path is None:
         config_path = Path(__file__).parent / 'config.yaml'
     
-    with open(config_path, 'r') as f:
+    with open(config_path) as f:
         return yaml.safe_load(f)
 
 def main():
@@ -53,7 +53,7 @@ def main():
     
     train_size = int(len(X) * config['model']['train_size'])
     X_train, X_test = X[:train_size], X[train_size:]
-    y_train, y_test = y[:train_size], y[train_size:]
+    y_train, _y_test = y[:train_size], y[train_size:]
     
     models = train_ensemble_models(X_train, y_train)
     
@@ -62,9 +62,8 @@ def main():
         pred = model.predict(X_test)
         individual_preds[name] = pred
     
-    ensemble_pred = ensemble_predict(models, X_test, config['model']['ensemble_method'])
+    ensemble_predict(models, X_test, config['model']['ensemble_method'])
     
-    from sklearn.metrics import mean_squared_error
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logging.info(f"\nEnsemble RMSE: {np.sqrt(mean_squared_error(y_test, ensemble_pred)):.4f}")
