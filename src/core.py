@@ -50,7 +50,7 @@ def ensemble_predict(models: Dict, X: np.ndarray, method: str = 'mean') -> np.nd
 def plot_ensemble_forecast(actual: np.ndarray, individual: Dict[str, np.ndarray],
                           ensemble: np.ndarray, title: str, output_path: Path):
     """Plot ensemble forecast """
-                          if plot:
+    if plot:
         fig, ax = plt.subplots(figsize=(10, 6))
     
         ax.plot(actual, label="Actual", color="#4A90A4", linewidth=1.2)
