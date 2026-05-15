@@ -1,22 +1,22 @@
-import signalplot
+import logging
+from dataclasses import dataclass
+from pathlib import Path
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from pathlib import Path
-from dataclasses import dataclass
-from sklearn.model_selection import TimeSeriesSplit
-from sklearn.metrics import mean_absolute_error
+import signalplot
 from darts import TimeSeries
 from darts.models import NBEATSModel
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import TimeSeriesSplit
 
-import logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 np.random.seed(42)
-signalplot.apply(font_family='serif')
+signalplot.apply(font_family="serif")
 
 
 @dataclass
@@ -32,11 +32,13 @@ class Config:
 
 def load_series(cfg: Config) -> TimeSeries:
     p = Path(cfg.csv_path)
-    df = pd.read_csv(p, header=None, usecols=[0,1], names=["date","value"], sep=",")
+    df = pd.read_csv(p, header=None, usecols=[0, 1], names=["date", "value"], sep=",")
     df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d", errors="coerce")
     df["value"] = pd.to_numeric(df["value"], errors="coerce").astype("float32")
     df = df.dropna().sort_values("date")
-    ts = TimeSeries.from_dataframe(df, time_col="date", value_cols=["value"], freq=cfg.freq)
+    ts = TimeSeries.from_dataframe(
+        df, time_col="date", value_cols=["value"], freq=cfg.freq
+    )
     return ts
 
 
@@ -50,7 +52,9 @@ def rolling_origin_nbeats(ts: TimeSeries, cfg: Config):
         end = tr[-1]
         y_tr = ts.drop_after(ts.time_index[end])
         future = ts.split_after(ts.time_index[end])[1]
-        y_te = future.drop_after(future.time_index[min(cfg.horizon-1, len(future)-1)])
+        y_te = future.drop_after(
+            future.time_index[min(cfg.horizon - 1, len(future) - 1)]
+        )
         if len(y_te) == 0:
             continue
         model = NBEATSModel(
@@ -80,12 +84,13 @@ def main(plot: bool = False):
     logger.info(f"N-BEATS mean MAE: {mean_mae}")
 
     if plot:
-        plt.figure(figsize=(9,4))
-        ts.plot(label='history', alpha=0.6)
+        plt.figure(figsize=(9, 4))
+        ts.plot(label="history", alpha=0.6)
         if y_pred is not None:
-            y_pred.plot(label='N-BEATS last fold')
+            y_pred.plot(label="N-BEATS last fold")
         plt.legend()
-        signalplot.save('eia_nbeats_last_fold.png')
+        signalplot.save("eia_nbeats_last_fold.png")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

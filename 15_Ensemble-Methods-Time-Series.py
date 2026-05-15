@@ -3,41 +3,44 @@
 
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parents[1]
 
-data_path = BASE_DIR / "data" / "energy_indicators.csv"
+def main():
+    BASE_DIR = Path(__file__).resolve().parents[1]
 
-# ARIMA
-# LSTM
-# Prophet
-# XGBoost
-# Each provides different strengths
+    data_path = BASE_DIR / "data" / "energy_indicators.csv"
 
-from sklearn.ensemble import VotingRegressor
+    # ARIMA
+    # LSTM
+    # Prophet
+    # XGBoost
+    # Each provides different strengths
 
-# Simple average of predictions
-voting_model = VotingRegressor([
-    ('arima', arima_model),
-    ('lstm', lstm_model),
-    ('prophet', prophet_model)
-])
+    from sklearn.ensemble import VotingRegressor
 
-# Weighted average with optimized weights
-# Use validation set to find best weights
+    # Simple average of predictions
+    voting_model = VotingRegressor(
+        [("arima", arima_model), ("lstm", lstm_model), ("prophet", prophet_model)]
+    )
 
-from sklearn.ensemble import StackingRegressor
+    # Weighted average with optimized weights
+    # Use validation set to find best weights
 
-# Meta-learner on base model predictions
-stacking_model = StackingRegressor(
-    estimators=[('arima', arima), ('lstm', lstm)],
-    final_estimator=LinearRegression()
-)
+    from sklearn.ensemble import StackingRegressor
 
-# Learn how to combine models
-# Feature importance from base models
-# Dynamic weighting based on performance
+    # Meta-learner on base model predictions
+    stacking_model = StackingRegressor(
+        estimators=[("arima", arima), ("lstm", lstm)], final_estimator=LinearRegression()
+    )
 
-# Ensemble pipeline
-# Model versioning
-# A/B testing
-# Performance monitoring
+    # Learn how to combine models
+    # Feature importance from base models
+    # Dynamic weighting based on performance
+
+    # Ensemble pipeline
+    # Model versioning
+    # A/B testing
+    # Performance monitoring
+
+
+if __name__ == "__main__":
+    main()
