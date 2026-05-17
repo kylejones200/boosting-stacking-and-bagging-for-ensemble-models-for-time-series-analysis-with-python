@@ -43,3 +43,11 @@ Edit `config.yaml` to customize:
 - By default, generates synthetic time series data.
 - Ensemble performance depends on model diversity.
 - Ordered time series requires preserving sequence.
+
+## Disclaimer
+
+Educational/demo code only. Not financial, safety, or engineering advice. Use at your own risk. Verify results independently before any production or operational use.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

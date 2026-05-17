@@ -62,27 +62,29 @@ def plot_ensemble_forecast(
     output_path: Path,
 ):
     """Plot ensemble forecast"""
-    if plot:
-        fig, ax = plt.subplots(figsize=(10, 6))
+    if not plot:
+        return
 
-        ax.plot(actual, label="Actual", color="#4A90A4", linewidth=1.2)
+    fig, ax = plt.subplots(figsize=(10, 6))
 
-        colors = ["#D4A574", "#8B6F9E"]
-        for i, (name, pred) in enumerate(individual.items()):
-            ax.plot(
-                pred,
-                label=name,
-                color=colors[i % len(colors)],
-                linewidth=1.2,
-                alpha=0.7,
-            )
+    ax.plot(actual, label="Actual", color="#4A90A4", linewidth=1.2)
 
+    colors = ["#D4A574", "#8B6F9E"]
+    for i, (name, pred) in enumerate(individual.items()):
         ax.plot(
-            ensemble, label="Ensemble", color="#A8C5A0", linewidth=1.5, linestyle="--"
+            pred,
+            label=name,
+            color=colors[i % len(colors)],
+            linewidth=1.2,
+            alpha=0.7,
         )
-        ax.set_xlabel("Time")
-        ax.set_ylabel("Value")
-        ax.legend(loc="best")
 
-        plt.savefig(output_path, dpi=100, bbox_inches="tight")
-        plt.close()
+    ax.plot(
+        ensemble, label="Ensemble", color="#A8C5A0", linewidth=1.5, linestyle="--"
+    )
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Value")
+    ax.legend(loc="best")
+
+    plt.savefig(output_path, dpi=100, bbox_inches="tight")
+    plt.close()
