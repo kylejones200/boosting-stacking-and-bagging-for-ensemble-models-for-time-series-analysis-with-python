@@ -34,7 +34,7 @@ def ensemble_predict(models: Dict, X: np.ndarray, method: str='mean') -> np.ndar
         return np.median(predictions, axis=0)
     return predictions.mean(axis=0)
 
-def plot_ensemble_forecast(actual: np.ndarray, individual: Dict[str, np.ndarray], ensemble: np.ndarray, title: str, output_path: Path, plot: bool = False):
+def plot_ensemble_forecast(actual: np.ndarray, individual: Dict[str, np.ndarray], ensemble: np.ndarray, title: str, output_path: Path, plot: bool=False):
     """Plot ensemble forecast"""
     if not plot:
         return
