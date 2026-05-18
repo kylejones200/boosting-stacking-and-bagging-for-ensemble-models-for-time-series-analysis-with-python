@@ -12,10 +12,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import yaml
+from sklearn.metrics import mean_squared_error
 from src.core import (
     create_ordered_features,
     ensemble_predict,
+    plot_ensemble_forecast,
     train_ensemble_models,
+)
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 
@@ -28,9 +34,9 @@ def load_config(config_path: Path | None = None) -> dict:
         return yaml.safe_load(f)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Ensemble Models for Ordered Time Series"
+        description=" Ensemble Models for Ordered Time Series"
     )
     parser.add_argument("--config", type=Path, default=None, help="Path to config file")
     parser.add_argument(
@@ -61,37 +67,35 @@ def main():
         data = pd.Series(values, index=dates)
     else:
         raise ValueError("No data source specified")
-        features_df = create_ordered_features(data, config["model"]["lag"])
+
+    features_df = create_ordered_features(data, config["model"]["lag"])
     X = features_df.drop(columns=["target"]).values
     y = features_df["target"].values
     train_size = int(len(X) * config["model"]["train_size"])
     X_train, X_test = X[:train_size], X[train_size:]
-    y_train, _y_test = y[:train_size], y[train_size:]
+    y_train, y_test = y[:train_size], y[train_size:]
     models = train_ensemble_models(X_train, y_train)
     individual_preds = {}
     for name, model in models.items():
-        pred = model.predict(X_test)
-        individual_preds[name] = pred
+        individual_preds[name] = model.predict(X_test)
 
-    ensemble_predict(models, X_test, config["model"]["ensemble_method"])
+    ensemble_pred = ensemble_predict(models, X_test, config["model"]["ensemble_method"])
 
+    logging.info(
+        f"\nEnsemble RMSE: {np.sqrt(mean_squared_error(y_test, ensemble_pred)):.4f}"
+    )
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
-logging.info(
-    f"\nEnsemble RMSE: {np.sqrt(mean_squared_error(y_test, ensemble_pred)):.4f}"
-)
+    plot_ensemble_forecast(
+        y_test,
+        individual_preds,
+        ensemble_pred,
+        "Ensemble Model Forecast",
+        output_dir / "ensemble_forecast.png",
+        plot=True,
+    )
 
-plot_ensemble_forecast(
-    y_test,
-    individual_preds,
-    ensemble_pred,
-    "Ensemble Model Forecast",
-    output_dir / "ensemble_forecast.png",
-)
+    logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
 
-logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
 
 if __name__ == "__main__":
     main()
