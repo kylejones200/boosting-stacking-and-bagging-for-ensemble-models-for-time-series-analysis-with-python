@@ -2,6 +2,7 @@
 Generated script to create Tufte-style visualizations
 """
 
+import logging
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -11,7 +12,7 @@ import torch.nn as nn
 from sklearn.ensemble import StackingRegressor, VotingRegressor
 from torch.utils.data import DataLoader, TensorDataset
 
-
+logger = logging.getLogger(__name__)
 class _LSTMForecaster(nn.Module):
     """LSTM forecaster (auto-generated PyTorch replacement for Keras Sequential)."""
 
@@ -97,20 +98,15 @@ def savefig_tufte(filename, **kwargs):
 
 def main() -> None:
     plt.savefig = savefig_tufte
-
-    data_path = Path("../../geospatial/datasets/energy_indicators.csv")
-
-    voting_model = VotingRegressor(
+    Path("../../geospatial/datasets/energy_indicators.csv")
+    VotingRegressor(
         [("arima", arima_model), ("lstm", lstm_model), ("prophet", prophet_model)]
     )
-
     np.random.seed(42)
-
-    stacking_model = StackingRegressor(
+    StackingRegressor(
         estimators=[("arima", arima), ("lstm", lstm)],
         final_estimator=LinearRegression(),
     )
-
     logger.info("All images generated successfully!")
 
 

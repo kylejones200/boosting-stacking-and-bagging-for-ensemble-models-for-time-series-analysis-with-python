@@ -88,7 +88,6 @@ def main(plot: bool = False):
     logger.info(f"ETS mean MAE: {ets_m}")
     logger.info(f"SARIMAX mean MAE: {sar_m}")
     logger.info(f"Ensemble mean MAE: {ens_m}")
-
     if plot:
         plt.figure(figsize=(9, 4))
         plt.plot(y.index, y.values, label="history", alpha=0.6)

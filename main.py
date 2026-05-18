@@ -19,7 +19,7 @@ from src.core import (
 )
 
 
-def load_config(config_path: Path = None) -> dict:
+def load_config(config_path: Path | None = None) -> dict:
     """Load configuration from YAML file."""
     if config_path is None:
         config_path = Path(__file__).parent / "config.yaml"
@@ -40,7 +40,6 @@ def main():
         "--output-dir", type=Path, default=None, help="Output directory"
     )
     args = parser.parse_args()
-
     config = load_config(args.config)
     output_dir = (
         Path(args.output_dir)
@@ -48,7 +47,6 @@ def main():
         else Path(config["output"]["figures_dir"])
     )
     output_dir.mkdir(exist_ok=True)
-
     if args.data_path and args.data_path.exists():
         df = pd.read_csv(args.data_path)
         data = df.iloc[:, 0]
@@ -63,17 +61,13 @@ def main():
         data = pd.Series(values, index=dates)
     else:
         raise ValueError("No data source specified")
-
         features_df = create_ordered_features(data, config["model"]["lag"])
     X = features_df.drop(columns=["target"]).values
     y = features_df["target"].values
-
     train_size = int(len(X) * config["model"]["train_size"])
     X_train, X_test = X[:train_size], X[train_size:]
     y_train, _y_test = y[:train_size], y[train_size:]
-
     models = train_ensemble_models(X_train, y_train)
-
     individual_preds = {}
     for name, model in models.items():
         pred = model.predict(X_test)
