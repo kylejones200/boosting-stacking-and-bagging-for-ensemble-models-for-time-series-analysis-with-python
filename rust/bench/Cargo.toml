@@ -1,0 +1,13 @@
+[package]
+name = "boosting_stacking_and_bagging_for_ensemble_models_for_time_series_analysis_with_python_bench"
+description = "Standalone Rust benchmark (no Python)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "bench"
+path = "src/main.rs"
+
+[dependencies]
+boosting_stacking_and_bagging_for_ensemble_models_for_time_series_analysis_with_python_core = { path = "../core" }

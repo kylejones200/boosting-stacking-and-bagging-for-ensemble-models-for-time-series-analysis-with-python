@@ -1,0 +1,9 @@
+[package]
+name = "boosting_stacking_and_bagging_for_ensemble_models_for_time_series_analysis_with_python_core"
+description = "Ensemble mean of stacked model predictions"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+path = "src/lib.rs"
